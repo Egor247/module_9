@@ -71,17 +71,9 @@ class FileStorage extends Storage
 
     public function update($idOrSlug, $object) 
     {
-        // $filename = $this->directory . '/serializedFiles/' . $idOrSlug;
-        // $serialized = serialize($object);
-        // file_put_contents($this->directory . '/serializedFiles/' . $idOrSlug, $serialized);
-        // $filename = $this->directory . '/serializedFiles/' . $idOrSlug;
-        // if (!file_exists($filename)) {
-        //     return null;
-        // }
         $data = serialize($object) . 'updated';
         file_put_contents($this->directory . '/serializedFiles/' . $idOrSlug, $data);
-        
-         return $data;
+        return $data;
     }
     
 
@@ -118,3 +110,4 @@ $fileStorageObj -> read($slug);
 $fileStorageObj -> update($slug, $fileStorageObj);
 $fileStorageObj -> delete($slug);  
 $fileStorageObj -> list();
+
