@@ -102,8 +102,11 @@ $slug = '/serializedFiles/serialezed_2023-05-08.txt';
 
 
 var_dump($slug = $fileStorageObj -> create($telegraphText));
+echo '<hr> read';
 var_dump($fileStorageObj -> read($slug));
+echo '<hr> update';
 var_dump($fileStorageObj -> update($slug, $telegraphText));
-// $fileStorageObj -> delete($slug);
+$fileStorageObj -> delete($slug);
+echo '<hr> list';
 var_dump($fileStorageObj -> list());
 
