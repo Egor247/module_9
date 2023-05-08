@@ -1,7 +1,7 @@
 <?php
 
 abstract class Storage {
-    abstract public function create($object, $slug);
+    abstract public function create($object);
     abstract public function read($id_or_slug);
     abstract public function update($id_or_slug, $updated_object);
     abstract public function delete($id_or_slug);
@@ -38,18 +38,18 @@ abstract class User {
 class FileStorage extends Storage
 {
 
-    public function create($object, $slug)
+    public function create($object)
     {
+        $serializedData = serialize($object);
         $date = date('Y-m-d');
-        $filename = $slug . '_' . $date;
+        $slug = md5($serializedData) . '_' . $date;
         $i = 1;
-        while (file_exists(__DIR__ . '/serializedFiles/' . $filename)) {
-            $filename = $slug . '_' . $date . '_' . $i ;
+        while (file_exists(__DIR__ . '/serializedFiles/' . $slug)) {
+            $slug = md5($serializedData) . '_' . $date . '_' . $i ;
             $i++;
         }
-        var_dump($serializedData = serialize($object));
-        file_put_contents(__DIR__ . '/serializedFiles/' . $filename, $serializedData);
-        return $filename;
+        file_put_contents(__DIR__ . '/serializedFiles/' . $slug, $serializedData);
+        return $slug;
     }
 
     public function read($slug)
@@ -60,14 +60,14 @@ class FileStorage extends Storage
         }
         $serializedData = file_get_contents($filename);
         $data = unserialize($serializedData);
-        return $serializedData;
+        return $data;
     }
 
     public function update($idOrSlug, $object) 
     {
         $data = serialize($object) . 'updated';
         file_put_contents(__DIR__ . '/serializedFiles/' . $idOrSlug, $data);
-        return $data;
+         var_dump($data);
     }
     
 
@@ -78,7 +78,7 @@ class FileStorage extends Storage
             return false;
         }
         unlink($filename);
-        return true;
+        
     }
 
     public function list()
@@ -89,7 +89,7 @@ class FileStorage extends Storage
         
         foreach($files as $file) {   
       
-            $objArr = unserialize(file_get_contents(__DIR__ . '/serializedFiles/' . $file)); 
+            $objArr[] = unserialize(file_get_contents(__DIR__ . '/serializedFiles/' . $file)); 
         }
             return $objArr;
         
@@ -101,9 +101,9 @@ $fileStorageObj = new FileStorage();
 $slug = '/serializedFiles/serialezed_2023-05-08.txt';
 
 
-$slug = $fileStorageObj -> create($telegraphText, 'serialezed');
-$fileStorageObj -> read($slug);
-$fileStorageObj -> update($slug, $telegraphText);
-$fileStorageObj -> delete($slug);
-$fileStorageObj -> list();
+var_dump($slug = $fileStorageObj -> create($telegraphText));
+var_dump($fileStorageObj -> read($slug));
+var_dump($fileStorageObj -> update($slug, $telegraphText));
+// $fileStorageObj -> delete($slug);
+var_dump($fileStorageObj -> list());
 
