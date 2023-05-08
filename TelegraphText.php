@@ -53,3 +53,4 @@ $editText = readline("Введите изменённый текст:");
 $telegraphText -> editText('Новый заголовок', 'Новый текст', __DIR__.'/array.txt', $textStorage);
 
 $telegraphText -> loadText('Автор', __DIR__.'/array.txt');
+
