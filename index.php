@@ -67,7 +67,7 @@ class FileStorage extends Storage
     {
         $data = serialize($object) . 'updated';
         file_put_contents(__DIR__ . '/serializedFiles/' . $idOrSlug, $data);
-         var_dump($data);
+        var_dump($data);
     }
     
 
@@ -101,12 +101,12 @@ $fileStorageObj = new FileStorage();
 $slug = '/serializedFiles/serialezed_2023-05-08.txt';
 
 
-var_dump($slug = $fileStorageObj -> create($telegraphText));
-echo '<hr> read';
-var_dump($fileStorageObj -> read($slug));
-echo '<hr> update';
-var_dump($fileStorageObj -> update($slug, $telegraphText));
+$slug = $fileStorageObj -> create($telegraphText);
+
+$fileStorageObj -> read($slug);
+
+$fileStorageObj -> update($slug, $telegraphText);
 $fileStorageObj -> delete($slug);
-echo '<hr> list';
-var_dump($fileStorageObj -> list());
+
+$fileStorageObj -> list();
 
