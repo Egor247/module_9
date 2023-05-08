@@ -106,3 +106,4 @@ $fileStorageObj -> read($slug);
 $fileStorageObj -> update($slug, $telegraphText);
 $fileStorageObj -> delete($slug);
 $fileStorageObj -> list();
+
