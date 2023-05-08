@@ -37,49 +37,43 @@ abstract class User {
 
 class FileStorage extends Storage
 {
-    private $directory;
 
-    public function __construct($directory)
-    {
-        $this->directory = $directory;
-    }
-    
     public function create($object, $slug)
     {
         $date = date('Y-m-d');
         $filename = $slug . '_' . $date;
         $i = 1;
-        while (file_exists($this->directory . '/serializedFiles/' . $filename)) {
-            $filename = $slug . '_' . $date . '_' . $i;
+        while (file_exists(__DIR__ . '/serializedFiles/' . $filename)) {
+            $filename = $slug . '_' . $date . '_' . $i ;
             $i++;
         }
-        $serializedData = serialize($object);
-        file_put_contents($this->directory . '/serializedFiles/' . $filename, $serializedData);
+        var_dump($serializedData = serialize($object));
+        file_put_contents(__DIR__ . '/serializedFiles/' . $filename, $serializedData);
         return $filename;
     }
 
     public function read($slug)
     {
-        $filename = $this->directory . '/serializedFiles/' . $slug;
+        $filename = __DIR__ . '/serializedFiles/' . $slug;
         if (!file_exists($filename)) {
             return null;
         }
         $serializedData = file_get_contents($filename);
         $data = unserialize($serializedData);
-         return $data;
+        return $serializedData;
     }
 
     public function update($idOrSlug, $object) 
     {
         $data = serialize($object) . 'updated';
-        file_put_contents($this->directory . '/serializedFiles/' . $idOrSlug, $data);
+        file_put_contents(__DIR__ . '/serializedFiles/' . $idOrSlug, $data);
         return $data;
     }
     
 
     public function delete($slug)
     {
-        $filename = $this->directory . '/serializedFiles/' . $slug;
+        $filename = __DIR__ . '/serializedFiles/' . $slug;
         if (!file_exists($filename)) {
             return false;
         }
@@ -101,13 +95,14 @@ class FileStorage extends Storage
         
     }
 }
+include 'TelegraphText.php';
 
-$fileStorageObj = new FileStorage(__DIR__);
-$slug = '/serializedFiles/serialezed_2023-05-07';
+$fileStorageObj = new FileStorage();
+$slug = '/serializedFiles/serialezed_2023-05-08.txt';
 
-$slug = $fileStorageObj -> create($fileStorageObj, 'serialezed');
+
+$slug = $fileStorageObj -> create($telegraphText, 'serialezed');
 $fileStorageObj -> read($slug);
-$fileStorageObj -> update($slug, $fileStorageObj);
-$fileStorageObj -> delete($slug);  
+$fileStorageObj -> update($slug, $telegraphText);
+$fileStorageObj -> delete($slug);
 $fileStorageObj -> list();
-
